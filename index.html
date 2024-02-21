@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Side Validation</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <style>
+        .box {
+            width: 100%;
+            max-width: 600px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 16px;
+            margin: 0 auto;
+        }
+
+        .error {
+            color: red;
+            font-weight: 700;
+        }
+
+        .form-group input {
+            display: block;
+            transition: background-color 0.3s; /* Add smooth transition */
+        }
+
+        .form-group input.valid {
+            background-color: #c8f7c5; /* Green background for valid input */
+        }
+
+        .form-group small {
+            position: absolute;
+            margin: 3px;
+            visibility: hidden;
+        }
+
+        .form-group.success input {
+            border: 2px solid Green;
+        }
+
+        .form-group.error input {
+            border: 2px solid red;
+        }
+
+        .form-group div input {
+            display: inline;
+            margin-right: 10px; /* Adjust the margin as needed */
+        }
+
+        .form-group input[type="radio"] {
+            display: inline;
+            margin-right: 10px; /* Adjust the margin as needed */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 4px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<?php include("connection.php"); ?>
+
+<body style="background-color: grey;" onload="setMinDate()">
+    <div class="container">
+        <div class="table-responsive">
+            <div class="box">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 align="center">Registration Form</h3><br />
+                    </div>
+                    <div class="card-body">
+                        <form id="validate_form" action="Store.php" method="post">
+
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" name="name" placeholder="Enter Name" id="name" class="form-control">
+                                <small></small>
+                            </div>
+                            <br>
+
+                            <div class="form-group">
+                                <label for="dob">Date of Birth</label>
+                                <input type="date" name="dob" class="form-control" id="dob">
+                                <small></small>
+                            </div>
+                            <br>
+
+                            <div class="form-group">
+                                <label for="age">Age</label>
+                                <input type="text" readonly name="age" id="age" class="form-control" disabled>
+                                <small></small>
+                            </div>
+                            <br>
+                            <br>
+
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="text" name="email" placeholder="Enter Email" id="email" class="form-control">
+                                <small></small>
+                            </div>
+                            <br>
+
+                            <!-- Password and Confirm Password -->
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" name="password" placeholder="Enter the Password" id="password"
+                                    class="form-control">
+                                <small></small>
+                            </div>
+                            <br>
+
+                            <div class="form-group">
+                                <label for="Conform_password">Confirm Password</label>
+                                <input type="password" name="Conform_password" placeholder="Enter The Confirm Password"
+                                    id="Conform_password" class="form-control">
+                                <small></small>
+                            </div>
+                            <br>
+
+                            <div class="form-group">
+                                <label for="gender">Gender :</label>
+                                <input type="radio" name="gender" value="male"> Male
+                                <input type="radio" name="gender" value="female"> Female
+                                <input type="radio" name="gender" value="Other"> Other
+                                <br>
+                                <small></small>
+                            </div>
+                            <br>
+
+                            <div class="form-group">
+                                <label for="courses">Select Programming Courses</label>
+                                <select name="courses[]" multiple class="form-control" id="courses">
+                                    <option value="">Choose Option</option>
+                                    <option value="HTML">HTML</option>
+                                    <option value="CSS">CSS</option>
+                                    <option value="Java Script">Java Script</option>
+                                    <option value="PHP">PHP</option>
+                                    <option value="React">React</option>
+                                </select>
+                                <small></small>
+                            </div>
+                            <br>
+
+                            <!-- Address -->
+                            <div class="form-group">
+                                <label for="Address">Address :</label>
+                                <div class="textarea">
+                                    <textarea name="Address" class="form-control" id="address"></textarea>
+                                    <small></small>
+                                </div>
+                            </div>
+                            <br>
+
+                            <!-- Mobile Number -->
+                            <div class="form-group">
+                                <label for="mobile">Mobile No.</label>
+                                <input type="text" name="mobile" id="mob" placeholder="Enter Mobile"
+                                    class="form-control" />
+                                <small></small>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <label for="Hobbies">Hobbies :</label>
+                                <div>
+                                    <input type="checkbox" name="hobbies[]" value="Music"> Music
+                                    <input type="checkbox" name="hobbies[]" value="Movies"> Movies
+                                    <input type="checkbox" name="hobbies[]" value="Sports"> Sports
+                                    <input type="checkbox" name="hobbies[]" value="Travel"> Travel
+                                </div>
+                                <small></small>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <label for="state">State :</label>
+                                <select name="state" class="form-control" id="state">
+                                    <option value="">Select State</option>
+                                    <option value="Alabama">Alabama</option>
+                                    <option value="Alaska">Alaska</option>
+                                    <option value="Karnataka">Karnataka</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                </select>
+                                <small></small>
+                            </div>
+                            <br>
+                           
+
+                            <div class="form-group">
+                                <input type="submit" name="submit" id="Submit_Button" value="Submit"
+                                    class="btn btn-success" />
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+    </div>
+
+    <script>
+        let name = document.getElementById("name");
+        let dob = document.getElementById("dob");
+        let email = document.getElementById("email");
+        let password = document.getElementById("password");
+        let Conform_password = document.getElementById("Conform_password");
+        let genderOptions = document.querySelectorAll('input[name="gender"]');
+        let coursesSelect = document.getElementById('courses');
+        let address = document.getElementById('address');
+        let mob = document.getElementById('mob');
+        let hobbies = document.querySelectorAll('input[name="hobbies[]"]');
+        let state = document.getElementById('state');
+        let image = document.getElementById('image');
+
+
+        function validateInput() {
+            const namePattern = /^[A-Za-z\s]+$/; // Alphabets and spaces allowed
+
+            if (name.value.trim() === "" || !namePattern.test(name.value.trim())) {
+                onError(name, "Name should include only alphabets ");
+            } else {
+                onSuccess(name);
+            }
+
+            if (dob.value.trim() === "") {
+                onError(dob, "Date of Birth cannot be empty");
+            } else {
+                onSuccess(dob);
+            }
+
+            if (email.value.trim() === "") {
+                onError(email, "Email cannot be empty");
+            } else {
+                if (!isValidEmail(email.value.trim())) {
+                    onError(email, "Please enter a valid Email");
+                } else {
+                    onSuccess(email);
+                }
+            }
+
+            if (password.value.trim() === "") {
+                onError(password, "Password cannot be empty");
+            } else {
+                if (!isValidPassword(password.value.trim())) {
+                    onError(password, "Password should include  8 characters with combination of alphabets, numbers, special characters");
+                } else {
+                    onSuccess(password);
+                }
+            }
+
+            if (Conform_password.value.trim() === "") {
+                onError(Conform_password, "Confirm Password cannot be empty");
+            } else {
+                if (password.value.trim() !== Conform_password.value.trim()) {
+                    onError(Conform_password, "Passwords do not match");
+                } else {
+                    onSuccess(Conform_password);
+                }
+            }
+
+            if (!validateGender()) {
+                return false;
+            }
+
+            if (coursesSelect.selectedOptions.length === 0) {
+                onError(coursesSelect, "Select your Courses");
+            } else {
+                onSuccess(coursesSelect);
+            }
+
+            if (address.value.trim() === "") {
+                onError(address, "Address cannot be empty");
+            } else {
+                onSuccess(address);
+            }
+
+            if (!validateMobile()) {
+                return false;
+            }
+
+            function validateMobile() {
+                const mobilePattern = /^[6789]\d{9}$/; // Check if it starts with 6, 7, 8, or 9 and has 10 digits
+                if (!mobilePattern.test(mob.value.trim())) {
+                    onError(mob, "Mobile number should have 10 digits");
+                    return false;
+                } else {
+                    onSuccess(mob);
+                    return true;
+                }
+            }
+
+            function validateGender() {
+                let checked = false;
+
+                genderOptions.forEach((option) => {
+                    if (option.checked) {
+                        checked = true;
+                    }
+                });
+
+                if (!checked) {
+                    onError(genderOptions[0], "Please select a gender");
+                    return false;
+                } else {
+                    onSuccess(genderOptions[0]);
+                    return true;
+                }
+            }
+
+            if (state.value === '') {
+                onError(state, "Please select a State");
+            } else {
+                onSuccess(state);
+            }
+
+        
+            return true;
+        }
+
+        function onSuccess(input) {
+            let parent = input.parentElement;
+            let messageEle = parent.querySelector("small");
+            messageEle.style.visibility = "hidden";
+            messageEle.innerHTML = "";
+            parent.classList.remove("error");
+            parent.classList.add("success");
+        }
+
+        function onError(input, message) {
+            let parent = input.parentElement;
+            let messageEle = parent.querySelector("small");
+            messageEle.style.visibility = "visible";
+            messageEle.innerHTML = message;
+            parent.classList.add("error");
+            parent.classList.remove("success");
+        }
+
+        function isValidEmail(email) {
+            return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
+        }
+
+        function isValidPassword(password) {
+            const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+            return passwordPattern.test(password);
+        }
+
+        function setMinDate() {
+            var today = new Date().toISOString().split('T')[0];
+            document.querySelector("#dob").setAttribute("max", today);
+        }
+
+        document.getElementById('dob').onchange = () => {
+            let dob = document.getElementById('dob').value;
+            let ageField = document.getElementById('age');
+            ageField.value = calculateAge(dob);
+            ageField.readOnly = true;
+        }
+
+        function calculateAge(dob) {
+            var today = new Date();
+            var dob = new Date(dob);
+            var age = today.getFullYear() - dob.getFullYear();
+            var monthDiff = today.getMonth() - dob.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+     
+        document.getElementById("validate_form").addEventListener("submit", (event) => {
+            if (validateInput()) {
+                // If validation passes, the form will be submitted to 'Store.php'
+                return true;
+            } else {
+                // If validation fails, prevent the form from submitting
+                event.preventDefault();
+            }
+        });
+
+    </script>
+
+<h1 style="background-color: white;">Registered  DataBase :</h1>
+<table class="table" style="background-color: white;">
+    <?php
+    include("connection.php");
+
+    // Retrive database
+    $query = "SELECT * FROM register_user3";
+    $result = mysqli_query($conn, $query);
+
+    ?>
+
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Date of Birth</th>
+            <th>Age</th>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>Courses</th>
+            <th>Address</th>
+            <th>Mobile</th>
+            <th>Hobbies</th>
+            <th>State</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+    
+    
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<tr>";
+            echo "<td>" . $row['name'] . "</td>";
+            echo "<td>" . $row['dob'] . "</td>";
+            echo "<td>" . $row['age'] . "</td>";
+            echo "<td>" . $row['email'] . "</td>";
+            echo "<td>" . $row['gender'] . "</td>";
+            echo "<td>" . $row['courses'] . "</td>";
+            echo "<td>" . $row['address'] . "</td>";
+            echo "<td>" . $row['mobile'] . "</td>";
+            echo "<td>" . $row['hobbies'] . "</td>";
+            echo "<td>" . $row['state'] . "</td>";
+           
+
+            echo "<td>
+                    <a href='index.php?id=" . $row['id'] . "' class='btn btn-primary'>Edit</a>
+                    <a href='index.php?id=" . $row['id'] . "' class='btn btn-danger'>Delete</a>
+                </td>";
+           
+        }
+        ?>
+    </tbody>
+</table>
+
+    </div>
+
+</body>
+
+</html>
