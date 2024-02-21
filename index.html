@@ -197,6 +197,11 @@
                                 <small></small>
                             </div>
                             <br>
+                            <div class="form-group">
+                                <label for="image">Upload Image (.png or .jpg, max 200 KB):</label>
+                                <input type="file" name="image" id="image" class="form-control">
+                                <small></small>
+                            </div>
                            
 
                             <div class="form-group">
@@ -226,6 +231,7 @@
         let hobbies = document.querySelectorAll('input[name="hobbies[]"]');
         let state = document.getElementById('state');
         let image = document.getElementById('image');
+        
 
 
         function validateInput() {
@@ -328,6 +334,29 @@
                 onSuccess(state);
             }
 
+            let allowedExtensions = ['png', 'jpg'];
+            let maxFileSize = 200 * 1024; // 200 KB
+
+            if (image.files.length === 0) {
+                onError(image, 'Please upload an image file');
+                return false;
+                
+            }
+
+            let fileName = image.files[0].name;
+            let fileSize = image.files[0].size;
+            let fileExtension = fileName.split('.').pop().toLowerCase();
+
+            if (!allowedExtensions.includes(fileExtension) || fileSize > maxFileSize) {
+                onError(image, 'Invalid image file. Please upload a .png or .jpg file, max 200 KB');
+                return false;
+                
+            } else {
+                onSuccess(image);
+                return true;
+                
+            }
+
         
             return true;
         }
@@ -384,72 +413,15 @@
 
      
         document.getElementById("validate_form").addEventListener("submit", (event) => {
+            event.preventDefault();
             if (validateInput()) {
-                // If validation passes, the form will be submitted to 'Store.php'
-                return true;
-            } else {
-                // If validation fails, prevent the form from submitting
-                event.preventDefault();
+                // If validation passes, you can submit the form or perform other actions
+                alert("Form submitted successfully!");
             }
         });
 
     </script>
 
-<h1 style="background-color: white;">Registered  DataBase :</h1>
-<table class="table" style="background-color: white;">
-    <?php
-    include("connection.php");
-
-    // Retrive database
-    $query = "SELECT * FROM register_user3";
-    $result = mysqli_query($conn, $query);
-
-    ?>
-
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Date of Birth</th>
-            <th>Age</th>
-            <th>Email</th>
-            <th>Gender</th>
-            <th>Courses</th>
-            <th>Address</th>
-            <th>Mobile</th>
-            <th>Hobbies</th>
-            <th>State</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-    
-    
-        while ($row = mysqli_fetch_assoc($result)) {
-            echo "<tr>";
-            echo "<td>" . $row['name'] . "</td>";
-            echo "<td>" . $row['dob'] . "</td>";
-            echo "<td>" . $row['age'] . "</td>";
-            echo "<td>" . $row['email'] . "</td>";
-            echo "<td>" . $row['gender'] . "</td>";
-            echo "<td>" . $row['courses'] . "</td>";
-            echo "<td>" . $row['address'] . "</td>";
-            echo "<td>" . $row['mobile'] . "</td>";
-            echo "<td>" . $row['hobbies'] . "</td>";
-            echo "<td>" . $row['state'] . "</td>";
-           
-
-            echo "<td>
-                    <a href='index.php?id=" . $row['id'] . "' class='btn btn-primary'>Edit</a>
-                    <a href='index.php?id=" . $row['id'] . "' class='btn btn-danger'>Delete</a>
-                </td>";
-           
-        }
-        ?>
-    </tbody>
-</table>
-
-    </div>
 
 </body>
 
