@@ -441,7 +441,7 @@
 
             echo "<td>
                     <a href='index.php?id=" . $row['id'] . "' class='btn btn-primary'>Edit</a>
-                    <a href='index.php?id=" . $row['id'] . "' class='btn btn-danger'>Delete</a>
+                    <a href='delete.php?id=" . $row['id'] . "' class='btn btn-danger'>Delete</a>
                 </td>";
            
         }
