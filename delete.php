@@ -17,9 +17,8 @@ if (isset($_GET['id'])) {
     echo "Invalid request";
 }
 
-// Redirect to the main page 
 
+// Redirect to the main page 
 header("Location: index.php");
-echo "<script>alert('Data Deleted successfully');</script>";
 exit();
 ?>
